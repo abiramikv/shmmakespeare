@@ -5,7 +5,8 @@ words = cmudict.dict()
 def numSyllables(word):
     count = 0
     vowels = ['a', 'e', 'i', 'o', 'u', 'y']
-
+    word = word.lower().strip(",.()':")
+    
     # first attempt to use NLTK database
     if word in words:
 
@@ -27,37 +28,42 @@ def numSyllables(word):
 
 # returns true if words rhyme, false if they do not or they are not found in dictionary
 def checkRhyme(word1, word2, level):
+    word1 = word1.lower().strip(",.()':")
+    word2 = word2.lower().strip(",.()':")
+
     if word1 in words and word2 in words:
         phon1 = words[word1]
         phon2 = words[word2]
-
-        if min(len(phon1[0]), len(phon2)) < level:
+        if min(len(phon1[0]), len(phon2[0])) < level:
             level = min(len(phon1[0]), len(phon2))
 
         for version1 in phon1:
             for version2 in phon2:
                 if version1[-level:] == version2[-level:]:
-                    print(version1[-level:], version2[-level:])
+                    # print(version1[-level:], version2[-level:])
                     return True
     return False
 
 def checkLine(sonnet, currLine, line):
+    level = 2
     sylCount = 0
     for word, _ in currLine:
         sylCount += numSyllables(word)
 
+    lastWord = currLine[-1][0]
 
     if sylCount == 10:
+        last
         if line > 12:
             if line == 13:
                 rhymes = True
             else:
-                rhymes = checkRhyme(currLine[-1], sonnet[line-1][-1], 2)
+                rhymes = checkRhyme(lastWord, sonnet[line-2][-1][0], level)
         else:
             if line in [1, 2, 5, 6, 9, 10]:
                 rhymes = True
             else:
-                rhymes = checkRhyme(currLine[-1], sonnet[line-2][-1], 2)
+                rhymes = checkRhyme(lastWord, sonnet[line-3][-1][0], level)
         if rhymes:
             return "finished"
         else:
