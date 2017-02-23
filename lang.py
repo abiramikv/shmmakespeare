@@ -6,7 +6,7 @@ def numSyllables(word):
     count = 0
     vowels = ['a', 'e', 'i', 'o', 'u', 'y']
     word = word.lower().strip(",.()':")
-    
+
     # first attempt to use NLTK database
     if word in words:
 
@@ -53,7 +53,6 @@ def checkLine(sonnet, currLine, line):
     lastWord = currLine[-1][0]
 
     if sylCount == 10:
-        last
         if line > 12:
             if line == 13:
                 rhymes = True
