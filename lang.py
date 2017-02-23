@@ -43,7 +43,7 @@ def checkRhyme(word1, word2, level):
 
 def checkLine(sonnet, currLine, line):
     sylCount = 0
-    for word in currLine:
+    for word, _ in currLine:
         sylCount += numSyllables(word)
 
 
@@ -52,12 +52,12 @@ def checkLine(sonnet, currLine, line):
             if line == 13:
                 rhymes = True
             else:
-                rhymes = checkRhyme(currLine[-1], sonnet[line-1][-1])
+                rhymes = checkRhyme(currLine[-1], sonnet[line-1][-1], 2)
         else:
             if line in [1, 2, 5, 6, 9, 10]:
                 rhymes = True
             else:
-                rhymes = checkRhyme(currLine[-1], sonnet[line-2][-1])
+                rhymes = checkRhyme(currLine[-1], sonnet[line-2][-1], 2)
         if rhymes:
             return "finished"
         else:
