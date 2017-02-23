@@ -51,6 +51,7 @@ def makeSonnet(model):
         if lineStatus == "invalid":
             word = currLine.pop()
             word = currLine.pop()
+            word = currLine.pop()
         elif lineStatus == "finished":
             sonnet.append(currLine)
             currLine = []
