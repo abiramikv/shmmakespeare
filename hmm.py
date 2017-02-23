@@ -1,5 +1,10 @@
 import numpy as np
-from hmmlearn import hmm
+
+import warnings
+
+with warnings.catch_warnings():
+    warnings.filterwarnings("ignore",category=DeprecationWarning)
+    from hmmlearn import hmm
 
 dictionary = []
 dictMap = {}
@@ -7,6 +12,7 @@ i = 0
 
 def dictionaryAdd(w):
     global i
+    w = w.lower().strip(",.")
     if w not in dictMap:
         dictMap[w] = i
         dictionary.append(w)
@@ -14,15 +20,15 @@ def dictionaryAdd(w):
     return dictMap[w]
 
 X = []
-maxLength = 0
+lengths = []
 
 def processLine(line):
-    global maxLength
+    global X, maxLength
     if len(line) < 30:
         return
     tokens = [dictionaryAdd(w) for w in line.split()]
-    maxLength = max(maxLength, len(tokens))
-    X.append(tokens)
+    X += tokens
+    lengths.append(len(tokens))
 
 with open("shakespeare.txt", 'r') as f:
     for line in f:
@@ -32,12 +38,14 @@ with open("spenser.txt", 'r') as f:
     for line in f:
         processLine(line)
 
-for i in range(len(X)):
-    X[i] = X[i] + [-1] * (maxLength - len(X[i]))
+trainData = np.array([X]).reshape(-1, 1)
+model = hmm.GaussianHMM(n_components=10, n_iter=20, verbose=True)
+model.fit(trainData, lengths=lengths)
 
-model = hmm.GaussianHMM(n_components=30, n_iter=20)
-model.fit(X)
-# >>> model.means_ = np.array([[0.0, 0.0], [3.0, -3.0], [5.0, 10.0]])
-# >>> model.covars_ = np.tile(np.identity(2), (3, 1, 1))
-X, Z = model.sample(100)
-print ' '.join([dictionary[i] for i in Z])
+sonnet = []
+for _ in range(14):
+    X, Z = model.sample(max(lengths))
+    sonnet.append(' '.join([dictionary[i] for i in Z]))
+
+for line in sonnet:
+    print line
