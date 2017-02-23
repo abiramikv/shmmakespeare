@@ -24,7 +24,7 @@ def numSyllables(word):
             count += 1
 
     return count
-    
+
 # returns true if words rhyme, false if they do not or they are not found in dictionary
 def checkRhyme(word1, word2, level):
     if word1 in words and word2 in words:
@@ -40,3 +40,29 @@ def checkRhyme(word1, word2, level):
                     print(version1[-level:], version2[-level:])
                     return True
     return False
+
+def checkLine(sonnet, currLine, line):
+    sylCount = 0
+    for word in currLine:
+        sylCount += numSyllables(word)
+
+
+    if sylCount == 10:
+        if line > 12:
+            if line == 13:
+                rhymes = True
+            else:
+                rhymes = checkRhyme(currLine[-1], sonnet[line-1][-1])
+        else:
+            if line in [1, 2, 5, 6, 9, 10]:
+                rhymes = True
+            else:
+                rhymes = checkRhyme(currLine[-1], sonnet[line-2][-1])
+        if rhymes:
+            return "finished"
+        else:
+            return "invalid"
+    if sylCount > 10:
+        return "invalid"
+    else:
+        return "valid"
