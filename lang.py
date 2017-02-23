@@ -37,7 +37,6 @@ def checkRhyme(word1, word2, level):
         for version1 in phon1:
             for version2 in phon2:
                 if version1[-level:] == version2[-level:]:
-                    print(version1[-level:], version2[-level:])
                     return True
     return False
 
@@ -52,12 +51,12 @@ def checkLine(sonnet, currLine, line):
             if line == 13:
                 rhymes = True
             else:
-                rhymes = checkRhyme(currLine[-1], sonnet[line-1][-1], 2)
+                rhymes = checkRhyme(currLine[-1][0], sonnet[line-1][-1][0], 2)
         else:
             if line in [1, 2, 5, 6, 9, 10]:
                 rhymes = True
             else:
-                rhymes = checkRhyme(currLine[-1], sonnet[line-2][-1], 2)
+                rhymes = checkRhyme(currLine[-1][0], sonnet[line-2][-1][0], 2)
         if rhymes:
             return "finished"
         else:

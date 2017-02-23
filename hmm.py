@@ -21,10 +21,11 @@ except:
 
 joblib.dump(model, "model.pkl")
 
-def printSonnet(sonnet):
+def printSonnet(sonnet, currLine, nextWord):
     for line in sonnet:
         words = [w for (w, _) in line]
         print ' '.join(words)
+    print ' '.join([w for (w, _) in currLine]), nextWord
     print ' '
 
 def generateNextWord((prevWord, prevState)):
@@ -43,11 +44,12 @@ def makeSonnet(model):
     word = (None, None)
     line = 1
     while line <= 14:
-        printSonnet(sonnet)
         nextWord = generateNextWord(word)
+        printSonnet(sonnet, currLine, nextWord)
         currLine.append(nextWord)
         lineStatus = lang.checkLine(sonnet, currLine, line)
         if lineStatus == "invalid":
+            word = currLine.pop()
             word = currLine.pop()
         elif lineStatus == "finished":
             sonnet.append(currLine)
