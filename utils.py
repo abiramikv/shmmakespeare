@@ -3,7 +3,7 @@ def parseInput():
     dictMap = {}
 
     def dictionaryAdd(w):
-        w = w.lower().strip(",.()'")
+        w = w.lower().strip(",.()':")
         if w not in dictMap:
             i = len(dictionary)
             dictMap[w] = i
