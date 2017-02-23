@@ -1,17 +1,25 @@
 import numpy as np
 import warnings
+from sklearn.externals import joblib
 
 with warnings.catch_warnings():
     warnings.filterwarnings("ignore",category=DeprecationWarning)
     from hmmlearn import hmm
 
+import lang
 import utils
 
 dictionary, X, lengths = utils.parseInput()
 
 trainData = np.array([X]).reshape(-1, 1)
-model = hmm.MultinomialHMM(n_components=10, n_iter=3, verbose=True)
-model.fit(trainData, lengths=lengths)
+
+try:
+    model = joblib.load("model.pkl")
+except:
+    model = hmm.MultinomialHMM(n_components=10, n_iter=3, verbose=True)
+    model.fit(trainData, lengths=lengths)
+
+joblib.dump(model, "model.pkl")
 
 def printSonnet(sonnet):
     for line in sonnet:
@@ -29,12 +37,6 @@ def generateNextWord((prevWord, prevState)):
         nextWord = model._generate_sample_from_state(nextState)
         return (dictionary[nextWord[0]], nextState)
 
-def checkLine(sonnet, currLine, line):
-    if len(currLine) > 8:
-        return "finished"
-    else:
-        return "valid"
-
 def makeSonnet(model):
     sonnet = []
     currLine = []
@@ -44,7 +46,7 @@ def makeSonnet(model):
         printSonnet(sonnet)
         nextWord = generateNextWord(word)
         currLine.append(nextWord)
-        lineStatus = checkLine(sonnet, currLine, line)
+        lineStatus = lang.checkLine(sonnet, currLine, line)
         if lineStatus == "invalid":
             word = currLine.pop()
         elif lineStatus == "finished":
@@ -54,11 +56,3 @@ def makeSonnet(model):
     printSonnet(sonnet)
 
 makeSonnet(model)
-
-sonnet = []
-for _ in range(14):
-    X, Z = model.sample(max(lengths))
-    sonnet.append(' '.join([dictionary[i[0]] for i in X]))
-
-for line in sonnet:
-    print line
