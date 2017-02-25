@@ -35,14 +35,15 @@ def printSonnet(sonnet):
 def generateNextWord((prevWord, prevState)):
     nextState = None
     nextWord = None
-    if not prevState:
-        X, Z = model.sample(max(lengths))
-        nextState = Z[0]
-        nextWord = X[0][0]
-    else:
-        transitions = model.transmat_[prevState]
-        nextState = np.random.choice(len(transitions), p=transitions)
-        nextWord = model._generate_sample_from_state(nextState)[0]
+    while nextWord == None or dictionary[nextWord] == prevWord:
+        if not prevState:
+            X, Z = model.sample(max(lengths))
+            nextState = Z[0]
+            nextWord = X[0][0]
+        else:
+            transitions = model.transmat_[prevState]
+            nextState = np.random.choice(len(transitions), p=transitions)
+            nextWord = model._generate_sample_from_state(nextState)[0]
     return (dictionary[nextWord], nextState)
 
 def makeSonnet(model):
