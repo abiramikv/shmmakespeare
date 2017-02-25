@@ -5,8 +5,7 @@ words = cmudict.dict()
 def numSyllables(word):
     count = 0
     vowels = ['a', 'e', 'i', 'o', 'u', 'y']
-    word = word.lower().strip(",.()':")
-    
+
     # first attempt to use NLTK database
     if word in words:
 
@@ -28,8 +27,8 @@ def numSyllables(word):
 
 # returns true if words rhyme, false if they do not or they are not found in dictionary
 def checkRhyme(word1, word2, level):
-    word1 = word1.lower().strip(",.()':")
-    word2 = word2.lower().strip(",.()':")
+    if word1 == word2:
+        return False
 
     if word1 in words and word2 in words:
         phon1 = words[word1]
@@ -56,17 +55,17 @@ def checkLine(sonnet, currLine, line):
         last
         if line > 12:
             if line == 13:
-                rhymes = True
+                rhymes = (lastWord in words)
             else:
                 rhymes = checkRhyme(lastWord, sonnet[line-2][-1][0], level)
         else:
             if line in [1, 2, 5, 6, 9, 10]:
-                rhymes = True
+                rhymes = (lastWord in words)
             else:
                 rhymes = checkRhyme(lastWord, sonnet[line-3][-1][0], level)
         if rhymes:
             return "finished"
-        else:
+        else:s
             return "invalid"
     if sylCount > 10:
         return "invalid"
