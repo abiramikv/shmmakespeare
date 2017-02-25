@@ -5,7 +5,7 @@ words = cmudict.dict()
 def numSyllables(word):
     count = 0
     vowels = ['a', 'e', 'i', 'o', 'u', 'y']
-    word = word.lower().strip(",.()':")
+    word = word.lower().strip(",.()':?")
 
     # first attempt to use NLTK database
     if word in words:
