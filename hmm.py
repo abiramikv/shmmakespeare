@@ -16,16 +16,16 @@ trainData = np.array([X]).reshape(-1, 1)
 try:
     model = joblib.load("model.pkl")
 except:
-    model = hmm.MultinomialHMM(n_components=10, n_iter=3, verbose=True)
+    model = hmm.MultinomialHMM(n_components=20, n_iter=3, verbose=True)
     model.fit(trainData, lengths=lengths)
 
 joblib.dump(model, "model.pkl")
 
-def printSonnet(sonnet, currLine, nextWord):
-    for line in sonnet:
+def printSonnet(sonnet):
+    for i, line in enumerate(sonnet):
         words = [w for (w, _) in line]
         print ' '.join(words)
-    print ' '.join([w for (w, _) in currLine]), nextWord
+    # print ' '.join([w for (w, _) in currLine]), nextWord
     print ' '
 
 def generateNextWord((prevWord, prevState)):
@@ -45,7 +45,7 @@ def makeSonnet(model):
     line = 1
     while line <= 14:
         nextWord = generateNextWord(word)
-        printSonnet(sonnet, currLine, nextWord)
+        printSonnet(sonnet)
         currLine.append(nextWord)
         lineStatus = lang.checkLine(sonnet, currLine, line)
         if lineStatus == "invalid":
