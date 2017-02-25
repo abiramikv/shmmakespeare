@@ -52,7 +52,6 @@ def checkLine(sonnet, currLine, line):
     lastWord = currLine[-1][0]
 
     if sylCount == 10:
-        last
         if line > 12:
             if line == 13:
                 rhymes = (lastWord in words)
@@ -65,7 +64,7 @@ def checkLine(sonnet, currLine, line):
                 rhymes = checkRhyme(lastWord, sonnet[line-3][-1][0], level)
         if rhymes:
             return "finished"
-        else:s
+        else:
             return "invalid"
     if sylCount > 10:
         return "invalid"
