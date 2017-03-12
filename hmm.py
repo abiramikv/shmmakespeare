@@ -26,8 +26,9 @@ def printSonnet(sonnet):
         padding = ''
         if i > 11:
             padding = '  '
-        words = [w for (w, _) in line]
-        words[0] = words[0].capitalize()
+        words = ["\\textcolor{" + str(s) + "}{" + w + "}" for w, s in line]
+        # words = [w for (w, _) in line]
+        # words[0] = words[0].capitalize()
         print(padding + ' '.join(words))
     # print ' '.join([w for (w, _) in currLine]), nextWord
     print ' '
@@ -66,4 +67,23 @@ def makeSonnet(model):
             line += 1
     printSonnet(sonnet)
 
+def visualizeStates(states):
+    for state in states:
+        x = sorted(enumerate(model.emissionprob_[state]), key = lambda x: x[1])[-10:]
+        print " ".join(map(lambda y: dictionary[y[0]], reversed(x)))
+
+        print ''
+
+def visualizeWords(words):
+    partitions = [[] for _ in range(10)]
+    for i, x in enumerate(dictionary):
+        probs = map(lambda state: model.emissionprob_[state][i], range(10))
+        j = np.argmax(probs)
+        partitions[j].append((probs[j], x))
+    for partition in partitions:
+        partition.sort(reverse=True)
+        print ' '.join(map(lambda t: t[1], partition[:10]))
+
 makeSonnet(model)
+#visualizeStates(range(10))
+#visualizeWords(set(["desolate", "love", "heart", "learn", "run", "beauty", "rosy", "confused", "labour", "cup", "time", "rise", "sea"]))
